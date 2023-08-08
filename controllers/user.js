@@ -14,6 +14,36 @@ exports.getLogin = (req, res, next)=>{
     res.sendFile(path.join(rootDir, "views", "login.html"));
 }
 
+exports.postLogin = async (req, res, next)=>{
+
+    try{
+
+        console.log(req.body.email);
+
+        const existingUser = await User.findByPk(req.body.email);
+
+        // console.log(existingUser);
+
+        if(existingUser === null){
+
+            res.status(401).json({message: 'user not exist'});
+        }
+        else if(existingUser.password === req.body.password){
+
+            res.status(201).json({message: 'login succesfully'});
+        }
+        else{
+
+            res.status(403).json({message: 'password did not match'});
+        }
+    
+    }
+    catch(err){
+
+        console.log(err);
+    }
+}
+
 exports.postSignUp = async (req, res, next)=>{
 
     try{

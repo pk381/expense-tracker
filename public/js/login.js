@@ -12,8 +12,15 @@ document.getElementById("submit").addEventListener('click', async (e)=>{
         password: password.value
     }
 
-    // let res = await axios.post("http://localhost:4000/user/sign_up", obj);
+    try{
 
-    console.log(obj);
+        let res = await axios.post("http://localhost:4000/user/login", obj);
+
+        console.log(res.data.message);
+    }
+    catch(err){
+        console.log(err);
+    }
+
 
 });
