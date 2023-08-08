@@ -3,10 +3,15 @@ const rootDir = require('../util/path');
 
 const User = require('../models/user');
 
-exports.signUp = (req, res, next)=>{
+exports.getSignUp = (req, res, next)=>{
 
     res.sendFile(path.join(rootDir, "views", "sign_up.html"));
     
+}
+
+exports.getLogin = (req, res, next)=>{
+
+    res.sendFile(path.join(rootDir, "views", "login.html"));
 }
 
 exports.postSignUp = async (req, res, next)=>{

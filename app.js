@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 
-app.use(userRoute);
+app.use('/user',userRoute);
 
 sequelize.sync()
 .then(res=>{

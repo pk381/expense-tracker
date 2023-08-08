@@ -1,6 +1,5 @@
 let message = document.getElementById('message');
 
-console.log(message.innerText);
 let name = document.getElementById('name');
 let email = document.getElementById('email');
 let password = document.getElementById('password');
