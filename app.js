@@ -1,11 +1,26 @@
 const express = require('express');
-const app = express();
+const path = require('path');
+const bodyParser = require('body-parser'); 
+const sequelize = require('./util/database'); // database
 
+const app = express();
 
 // routes
 const userRoute = require('./routes/user');
 
-app.use(userRoute);
-console.log("listining");
+// static files/
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(4000);
+app.use(bodyParser.json());
+
+app.use(userRoute);
+
+sequelize.sync()
+.then(res=>{
+    // console.log(res);
+    console.log("listining");
+    app.listen(4000);
+})
+.catch(err=>{
+    console.log(err);
+})
