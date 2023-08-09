@@ -8,12 +8,16 @@ const app = express();
 // routes
 const userRoute = require('./routes/user');
 
+const expensRoute = require('./routes/expense');
+
 // static files/
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 
 app.use('/user',userRoute);
+
+app.use(expensRoute);
 
 sequelize.sync()
 .then(res=>{
