@@ -3,7 +3,7 @@ let message = document.getElementById('message');
 let name = document.getElementById('name');
 let email = document.getElementById('email');
 let password = document.getElementById('password');
-let confirm_password = document.getElementById('confirm_password');
+// let confirm_password = document.getElementById('confirm_password');
 
 document.getElementById('sign_up').addEventListener('click', async (e)=>{
 
@@ -18,10 +18,12 @@ document.getElementById('sign_up').addEventListener('click', async (e)=>{
     try{
         const res = await axios.post("http://localhost:4000/user/sign_up", obj);
 
-        if(res.data.user = 'userExist'){
+        if(res.data.user === 'userExist'){
             message.innerText = "Email already exist";
         }
-            
+        else{
+            message.innerText = "Account created Successfully";
+        }      
     }
     catch(err){
         console.log(err);
