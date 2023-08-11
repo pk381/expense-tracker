@@ -2,6 +2,13 @@ const path = require("path");
 const rootDir = require("../util/path");
 const bcrypt = require("bcrypt");
 
+const jwt = require('jsonwebtoken');
+
+function generateToken(id){
+
+  return jwt.sign({id: id}, 'secretKey');
+}
+
 const User = require("../models/user");
 
 exports.getSignUp = (req, res, next) => {
@@ -18,6 +25,8 @@ exports.postLogin = async (req, res, next) => {
 
     const existingUser = await User.findByPk(req.body.email);
 
+    console.log(existingUser.email);
+
     if (existingUser === null) {
       res.status(401).json({ message: "user not exist" });
     } else{
@@ -25,8 +34,10 @@ exports.postLogin = async (req, res, next) => {
         const password = existingUser.password;
         bcrypt.compare(req.body.password, password, async (err, result)=>{
 
+            console.log("err", err);
+            
             if(result === true){
-                res.status(201).json({message: "login sussessfully"});
+                res.status(201).json({message: "login sussessfully", token: generateToken(existingUser.id)});
             }
             else{
                 res.status(401).json({message: "password did not match"});

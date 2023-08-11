@@ -21,7 +21,6 @@ app.use(expensRoute);
 
 sequelize.sync()
 .then(res=>{
-    // console.log(res);
     console.log("listining");
     app.listen(4000);
 })

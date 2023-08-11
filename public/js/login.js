@@ -16,7 +16,10 @@ document.getElementById("submit").addEventListener('click', async (e)=>{
 
         let res = await axios.post("http://localhost:4000/user/login", obj);
 
-        console.log(res.data.message);
+        console.log(res.data.message, res.data.token);
+        localStorage.setItem('token', res.data.token);
+
+        window.location.href="/";
     }
     catch(err){
         console.log(err);
