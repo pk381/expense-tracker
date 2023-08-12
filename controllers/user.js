@@ -37,7 +37,7 @@ exports.postLogin = async (req, res, next) => {
             console.log("err", err);
             
             if(result === true){
-                res.status(201).json({message: "login sussessfully", token: generateToken(existingUser.id)});
+                res.status(201).json({message: "login sussessfully", token: generateToken(existingUser.email)});
             }
             else{
                 res.status(401).json({message: "password did not match"});

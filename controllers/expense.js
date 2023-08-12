@@ -13,13 +13,14 @@ exports.postAddExpense = async (req, res, next) => {
   const description = req.body.description;
   const category = req.body.category;
 
-  console.log("reqbody ", req.body);
+  // console.log("reqbody ", req.body);
 
   try {
     const expense = await Expense.create({
       amount: amount,
       description: description,
-      category: category
+      category: category,
+      userEmail: req.user.email
     });
 
     res.status(201).json({ expense: expense });
@@ -29,11 +30,14 @@ exports.postAddExpense = async (req, res, next) => {
 };
 
 exports.getExpenses = async (req, res, next) => {
+
+  // console.log(req.user.email);
+
   try {
-    const expenses = await Expense.findAll();
+    const expenses = await Expense.findAll({where:{userEmail:req.user.email}});
     res.status(201).json({ expenses: expenses });
-  } catch {
-    console.log("err2");
+  } catch(err) {
+    console.log("err2", err);
   }
 };
 

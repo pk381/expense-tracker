@@ -3,9 +3,10 @@ let expenses = document.getElementById("items");
 
 let details = document.querySelectorAll("input");
 
+const token = localStorage.getItem('token');
 
 document.getElementById("submit").addEventListener("click",async (e) => {
-
+  
   e.preventDefault();
 
   let obj = {
@@ -16,9 +17,9 @@ document.getElementById("submit").addEventListener("click",async (e) => {
 
   try {
 
-    const res = await axios.post('http://localhost:4000/add-expense', obj)
+    const res = await axios.post('http://localhost:4000/add-expense', obj, { headers: {Authorization: token } });
 
-    newAppointment(res.data.expense);
+    addExpense(res.data.expense);
 
     details[0].value = "";
     details[1].value = "";
@@ -32,7 +33,7 @@ document.getElementById("submit").addEventListener("click",async (e) => {
 window.addEventListener("DOMContentLoaded", async () => {
 
   try {
-    const res = await axios.get("http://localhost:4000/get-expenses");
+    const res = await axios.get("http://localhost:4000/get-expenses",{headers:{"Authorization":token}});
     for (var i = 0; i < res.data.expenses.length; i++) {
       addExpense(res.data.expenses[i]);
     }

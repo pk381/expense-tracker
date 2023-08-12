@@ -9,7 +9,6 @@ const Expense = sequelize.define('expenses',{
         autoIncrement:true,
         primaryKey:true
     },
-
     amount:{
         type:Sequelize.DataTypes.STRING,
         allowNull:false,

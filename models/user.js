@@ -3,7 +3,6 @@ const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
 const User = sequelize.define('user',{
-    
     name:{
         type: Sequelize.DataTypes.STRING,
         allowNull: false,  
@@ -16,7 +15,8 @@ const User = sequelize.define('user',{
     password:{
         type: Sequelize.DataTypes.STRING,
         allowNull:false
-    }
+    },
+    ispremuimuser:Sequelize.DataTypes.BOOLEAN
 });
 
 module.exports = User;
