@@ -14,6 +14,7 @@ const Order = require('./models/order');
 const userRoute = require('./routes/user');
 const expensRoute = require('./routes/expense');
 const purchsseRoute = require('./routes/purchase');
+const premiumRoute = require('./routes/premium');
 
 // static files/
 app.use(express.static(path.join(__dirname, 'public')));
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 app.use('/user',userRoute);
+app.use('/premium',premiumRoute);
 
 app.use(expensRoute);
 app.use('/purchase',purchsseRoute);

@@ -22,12 +22,9 @@ document.getElementById("buy_premium").addEventListener("click", async () => {
         );
         alert("you are premium member");
 
-        // document.querySelector(".rzp").style.visibility = "hidden";
-        // document.querySelector("#msg").textContent = "You Are Premium User";
-        // document.getElementById("leaderboard").textContent = "Show Leaderboard";
-        // document.getElementById("downloadexpense").textContent =
-        //   "Download File";
-        // showDownloadLinks();
+        document.getElementById("buy_premium").style.visibility = "hidden";
+        document.querySelector("#msg").textContent = "You Are Premium User";
+    
         localStorage.setItem("token", res.data.token);
       },
     };

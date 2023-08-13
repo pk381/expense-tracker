@@ -13,8 +13,6 @@ exports.postAddExpense = async (req, res, next) => {
   const description = req.body.description;
   const category = req.body.category;
 
-  // console.log("reqbody ", req.body);
-
   try {
     const expense = await Expense.create({
       amount: amount,
@@ -30,8 +28,6 @@ exports.postAddExpense = async (req, res, next) => {
 };
 
 exports.getExpenses = async (req, res, next) => {
-
-  // console.log(req.user.email);
 
   try {
     const expenses = await Expense.findAll({where:{userEmail:req.user.email}});

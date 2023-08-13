@@ -18,6 +18,7 @@ document.getElementById("submit").addEventListener('click', async (e)=>{
 
         console.log(res.data.message, res.data.token);
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('isPremium', res.data.isPremium);
 
         window.location.href="/";
     }
