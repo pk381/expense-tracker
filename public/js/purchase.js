@@ -3,14 +3,15 @@ document.getElementById("buy_premium").addEventListener("click", async () => {
   try {
     let token = localStorage.getItem("token");
 
-    const response = await axios.get(
+    const res = await axios.get(
       "http://localhost:4000/purchase/premiummembership",
       { headers: { Authorization: token } }
     );
 
     const options = {
-      key: response.data.key_id,
-      order_id: response.data.order.id,
+      key: res.data.key_id,
+      order_id: res.data.order.id,
+
       handler: async function (result) {
         const res = await axios.post(
           "http://localhost:4000/purchase/updatestatus",
@@ -36,7 +37,7 @@ document.getElementById("buy_premium").addEventListener("click", async () => {
       await axios.post(
         "http://localhost:4000/purchase/updatefailure",
         {
-          order_id: response.data.order.id,
+          order_id: res.data.order.id,
         },
         { headers: { Authorization: token } }
       );

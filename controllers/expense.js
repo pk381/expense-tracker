@@ -1,6 +1,7 @@
 const path = require("path");
 const rootDir = require("../util/path");
 const Expense = require('../models/expense');
+const User = require('../models/user');
 
 exports.getIndex = (req, res, next) => {
   res.sendFile(path.join(rootDir, "views", "index.html"));
@@ -15,11 +16,16 @@ exports.postAddExpense = async (req, res, next) => {
 
   try {
     const expense = await Expense.create({
-      amount: amount,
+      amount: parseInt(amount),
       description: description,
       category: category,
-      userEmail: req.user.email
+      userId: req.user.id
     });
+
+    await User.update(
+      { totalAmount: req.user.totalAmount + parseInt(amount)},
+      { where: {id: req.user.id }}
+    );
 
     res.status(201).json({ expense: expense });
   } catch(err) {
@@ -30,7 +36,7 @@ exports.postAddExpense = async (req, res, next) => {
 exports.getExpenses = async (req, res, next) => {
 
   try {
-    const expenses = await Expense.findAll({where:{userEmail:req.user.email}});
+    const expenses = await Expense.findAll({where:{userId: req.user.id}});
     res.status(201).json({ expenses: expenses });
   } catch(err) {
     console.log("err2", err);
@@ -41,7 +47,7 @@ exports.deleteExpense = async (req, res, next) => {
 
   try {
     const id = req.params.id;
-    await Expense.destroy({ where: { id: id } });
+    await Expense.destroy({ where: {id: id} });
     res.sendStatus(200);
   } catch (err) {
     console.log(err);

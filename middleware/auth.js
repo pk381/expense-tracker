@@ -11,7 +11,7 @@ exports.authantication = async (req, res, next)=>{
         // console.log("user ", userObj);
         const user = await User.findByPk(userObj.id);
         // console.log(user);
-        req.user=user;
+        req.user = user;
         next();
     }
     catch(err){

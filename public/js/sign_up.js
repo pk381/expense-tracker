@@ -3,7 +3,6 @@ let message = document.getElementById('message');
 let name = document.getElementById('name');
 let email = document.getElementById('email');
 let password = document.getElementById('password');
-// let confirm_password = document.getElementById('confirm_password');
 
 document.getElementById('sign_up').addEventListener('click', async (e)=>{
 
@@ -22,7 +21,8 @@ document.getElementById('sign_up').addEventListener('click', async (e)=>{
             message.innerText = "Email already exist";
         }
         else{
-            message.innerText = "Account created Successfully";
+
+            window.location.href = "/user/login";
         }      
     }
     catch(err){

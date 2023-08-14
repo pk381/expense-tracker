@@ -36,3 +36,42 @@ async function premiumFeature(e) {
     console.log(err);
   }
 }
+
+document.getElementById("leaderBoardBtn").addEventListener("click", async ()=> {
+
+  try {
+    let token = localStorage.getItem("token");
+
+    const res = await axios.get(
+      "http://localhost:4000/premium/leaderboard",
+      {
+        headers: { Authorization: token },
+      }
+    );
+
+    let boardList = document.getElementById("leaderBoard");
+
+    let text = document.createTextNode("Leader Board");
+
+    boardList.appendChild(text);
+
+    
+    console.log(res);
+    res.data.forEach((details) => {
+
+      let newItem = document.createElement("li");
+
+      newItem.appendChild(
+        document.createTextNode(
+          `name - ${details.name} Total_Amount - ${details.total_cost}`
+        )
+      );
+
+      boardList.appendChild(newItem);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+});
+

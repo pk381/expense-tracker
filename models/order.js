@@ -9,8 +9,8 @@ const Order = sequelize.define('order',{
         autoIncrement:true,
         primaryKey:true
     },
-   paymentid:Sequelize.DataTypes.STRING,
-   orderid:Sequelize.DataTypes.STRING,
+   paymentId:Sequelize.DataTypes.STRING,
+   orderId:Sequelize.DataTypes.STRING,
    status:Sequelize.DataTypes.STRING,
 });
 
