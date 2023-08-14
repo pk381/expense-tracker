@@ -15,6 +15,8 @@ const userRoute = require('./routes/user');
 const expensRoute = require('./routes/expense');
 const purchsseRoute = require('./routes/purchase');
 const premiumRoute = require('./routes/premium');
+const forgotPasswordRoute = require('./routes/forgot_password');
+
 
 // static files/
 app.use(express.static(path.join(__dirname, 'public')));
@@ -25,6 +27,7 @@ app.use('/user',userRoute);
 app.use('/premium',premiumRoute);
 
 app.use(expensRoute);
+app.use(forgotPasswordRoute);
 app.use('/purchase',purchsseRoute);
 
 

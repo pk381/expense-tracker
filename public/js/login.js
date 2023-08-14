@@ -28,3 +28,8 @@ document.getElementById("submit").addEventListener('click', async (e)=>{
 
 
 });
+
+document.getElementById("forgot_password").addEventListener("click", ()=>{
+
+    window.location.href = "/forgot-password";
+})
