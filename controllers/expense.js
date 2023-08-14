@@ -3,6 +3,8 @@ const rootDir = require("../util/path");
 const Expense = require('../models/expense');
 const User = require('../models/user');
 
+const sequelize = require('../util/database');
+
 exports.getIndex = (req, res, next) => {
   res.sendFile(path.join(rootDir, "views", "index.html"));
 };
@@ -13,6 +15,9 @@ exports.postAddExpense = async (req, res, next) => {
   const amount = req.body.amount;
   const description = req.body.description;
   const category = req.body.category;
+  
+
+  const transaction = await sequelize.transaction();
 
   try {
     const expense = await Expense.create({
@@ -20,15 +25,21 @@ exports.postAddExpense = async (req, res, next) => {
       description: description,
       category: category,
       userId: req.user.id
-    });
+    },
+    {transaction: transaction}
+    );
 
     await User.update(
       { totalAmount: req.user.totalAmount + parseInt(amount)},
-      { where: {id: req.user.id }}
+      { where: {id: req.user.id }, transaction: transaction}
+      
     );
-
+    
+    await transaction.commit();
     res.status(201).json({ expense: expense });
   } catch(err) {
+
+    await transaction.rollback();
     console.log(err);
   }
 };
