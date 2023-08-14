@@ -64,6 +64,8 @@ function addExpense(obj) {
 
     let li = e.target.parentElement;
 
+    console.log("deleting");
+
     try{
      await axios.delete("http://localhost:4000/delete-expense/" + obj.id);
      expenses.removeChild(li);
@@ -73,31 +75,6 @@ function addExpense(obj) {
     }
     
   };
-
-//   let editBtn = document.createElement("button");
-
-//   editBtn.className = "btn btn-dark btn-sm mx-1 float-right";
-//   editBtn.appendChild(document.createTextNode("Edit"));
-
-//   newItem.appendChild(editBtn);
-
-//   editBtn.onclick = async (e)=>{
-
-//     let li = e.target.parentElement;
-//     expenses.removeChild(li);
-
-//     details[0].value = obj.amount;
-//     details[1].value = obj.description;
-//     document.getElementById("category").value = obj.category;
-    
-//     try{
-//       await axios.delete('http://localhost:4000/delete-expense/'+obj.id);
-//     }
-//     catch(err){
-//       console.log(err);
-//     }
-    
-//   };
 
   expenses.appendChild(newItem);
 }

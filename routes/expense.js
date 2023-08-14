@@ -12,4 +12,7 @@ router.post('/add-expense', authantication.authantication, expenseController.pos
 
 router.get('/get-expenses', authantication.authantication, expenseController.getExpenses);
 
+router.delete('/delete-expense/:expenseId', expenseController.deleteExpense);
+
+
 module.exports = router;

@@ -2,7 +2,6 @@ const path = require("path");
 const rootDir = require("../util/path");
 const Expense = require('../models/expense');
 const User = require('../models/user');
-
 const sequelize = require('../util/database');
 
 exports.getIndex = (req, res, next) => {
@@ -15,7 +14,6 @@ exports.postAddExpense = async (req, res, next) => {
   const amount = req.body.amount;
   const description = req.body.description;
   const category = req.body.category;
-  
 
   const transaction = await sequelize.transaction();
 
@@ -56,11 +54,28 @@ exports.getExpenses = async (req, res, next) => {
 
 exports.deleteExpense = async (req, res, next) => {
 
+  const transaction = await sequelize.transaction();
+
   try {
-    const id = req.params.id;
-    await Expense.destroy({ where: {id: id} });
+    const id = req.params.expenseId;
+
+    console.log(id);
+
+    const expense = await Expense.findByPk(id);
+
+    const user = await User.findOne({where: {id: expense.userId}});
+
+    await Expense.destroy({ where: {id: id}, transaction: transaction });
+
+    await User.update({totalAmount: user.totalAmount - expense.amount}, { where: {id: user.id}, transaction: transaction});
+
+    await transaction.commit();
+
     res.sendStatus(200);
-  } catch (err) {
+
+  } catch (err){
+
+    await transaction.rollback();
     console.log(err);
     res.status(500).json(err);
   }
