@@ -63,7 +63,7 @@ document.getElementById("leaderBoardBtn").addEventListener("click", async ()=> {
 
       newItem.appendChild(
         document.createTextNode(
-          `name - ${details.name} Total_Amount - ${details.total_cost}`
+          `name - ${details.name} Total_Amount - ${details.totalExpense}`
         )
       );
 
