@@ -1,6 +1,7 @@
 const Razorpay = require('razorpay');
 const Order = require('../models/order');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 console.log("key_id ",process.env.RAZORPAY_KEY_ID);
 
