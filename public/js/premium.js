@@ -7,7 +7,7 @@ if (isPremium === "true") {
   document.getElementById("buy_premium").style.visibility = "hidden";
   document.querySelector("#msg").textContent = "You Are Premium User";
 } else {
-  document.getElementById("leaderBoardBtn").style.visibility = "hidden";
+  document.getElementById("premium").style.visibility = "hidden";
   console.log("not a premium user");
 }
 
@@ -74,4 +74,9 @@ document.getElementById("leaderBoardBtn").addEventListener("click", async ()=> {
   }
 
 });
+
+
+document.getElementById("download").addEventListener("click", async ()=>{
+  console.log("download btn");
+})
 
