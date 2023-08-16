@@ -1,7 +1,9 @@
 const User = require("../models/user");
-const Expense = require("../models/expense");
-const sequelize = require("../util/database");
-const AWS = require("aws-sdk");
+// const Expense = require("../models/expense");
+// const sequelize = require("../util/database");
+// const AWS = require("aws-sdk");
+
+const S3services = require('../services/S3services');
 
 exports.getLeaderBoard = async (req, res, next) => {
   try {
@@ -30,32 +32,7 @@ exports.isPremiumUser = async (req, res, next) => {
   console.log("is Premium User");
 };
 
-function uploadToS3(data, filename) {
-  const bucketName = "expensetrackerprabhat";
 
-  let s3Bucket = new AWS.S3({
-    accessKeyId: process.env.ACCESS_KEY,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  });
-
-  var params = {
-    Bucket: bucketName,
-    Key: filename,
-    Body: data,
-    ACL: "public-read",
-  };
-
-  return new Promise((resolve, reject) => {
-    s3Bucket.upload(params, (err, res) => {
-      if (err) {
-        console.log(err);
-        reject(err);
-      } else {
-        resolve(res.Location);
-      }
-    });
-  });
-}
 exports.getDownload = async (req, res, next) => {
 
   try {
@@ -68,7 +45,7 @@ exports.getDownload = async (req, res, next) => {
     const filename = `Expense_${
       req.user.id
     }_${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/${date.getTime()}.txt`;
-    const url = await uploadToS3(stringifiedExpense, filename);
+    const url = await S3services.uploadToS3(stringifiedExpense, filename);
 
     res.status(201).json({ url: url });
   } catch (err) {
