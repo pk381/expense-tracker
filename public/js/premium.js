@@ -76,7 +76,28 @@ document.getElementById("leaderBoardBtn").addEventListener("click", async ()=> {
 });
 
 
-document.getElementById("download").addEventListener("click", async ()=>{
-  console.log("download btn");
+document.getElementById("downloadBtn").addEventListener("click", async ()=>{
+  
+  try{
+    const res = await axios.get("http://localhost:4000/premium/download", 
+    {
+      headers: { Authorization: token }
+    });
+
+    if(res.status === 201){
+      
+      var a = document.createElement("a");
+      a.href = res.data.url;
+      a.download = "my-expense.csv";
+      a.click();
+    }
+    else{
+      console.log("some error");
+    }
+    
+  }
+  catch(err){
+    console.log(err);
+  }
 })
 
