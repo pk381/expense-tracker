@@ -1,7 +1,5 @@
 const User = require("../models/user");
-// const Expense = require("../models/expense");
-// const sequelize = require("../util/database");
-// const AWS = require("aws-sdk");
+const UserExpenseFiles = require("../models/user_expense_files");
 
 const S3services = require('../services/S3services');
 
@@ -28,8 +26,19 @@ exports.getLeaderBoard = async (req, res, next) => {
   }
 };
 
-exports.isPremiumUser = async (req, res, next) => {
-  console.log("is Premium User");
+exports.getFileUrls = async (req, res, next) => {
+  
+  try {
+
+    const fileUrls = await req.user.getUserExpenseFiles();
+
+    res.status(201).json({fileUrls: fileUrls})
+    
+  } catch (err) {
+
+    console.log(err);
+    res.status(500).json({err});
+  }
 };
 
 
@@ -46,6 +55,11 @@ exports.getDownload = async (req, res, next) => {
       req.user.id
     }_${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/${date.getTime()}.txt`;
     const url = await S3services.uploadToS3(stringifiedExpense, filename);
+
+    await UserExpenseFiles.create({
+      fileUrl: url,
+      userId: req.user.id
+    });
 
     res.status(201).json({ url: url });
   } catch (err) {
