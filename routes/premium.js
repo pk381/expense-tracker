@@ -7,5 +7,8 @@ router.get('/leaderboard',authentication.authantication, premiumControllers.getL
 
 router.get('/download',authentication.authantication, premiumControllers.getDownload);
 
+router.get('/all-files',authentication.authantication, premiumControllers.getFileUrls);
+
+
 
 module.exports = router;

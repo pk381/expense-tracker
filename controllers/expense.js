@@ -3,6 +3,7 @@ const rootDir = require("../util/path");
 const Expense = require('../models/expense');
 const User = require('../models/user');
 const sequelize = require('../util/database');
+const { Console } = require("console");
 
 exports.getIndex = (req, res, next) => {
   res.sendFile(path.join(rootDir, "views", "index.html"));
@@ -45,8 +46,26 @@ exports.postAddExpense = async (req, res, next) => {
 exports.getExpenses = async (req, res, next) => {
 
   try {
-    const expenses = await Expense.findAll({where:{userId: req.user.id}});
-    res.status(201).json({ expenses: expenses });
+    const pageSize = 3;
+    const page = parseInt(req.query.page);
+
+    const noOfExpense = await Expense.count({where: {userId: req.user.id}});
+
+    let expenses = await Expense.findAll({
+      where: { userId: req.user.id },
+      offset: (page - 1) * pageSize,
+      limit: pageSize
+    });
+
+    res.status(201).json({ expenses: expenses,
+       currentPage: page,
+       nextPage: page + 1,
+       hasNextPage: (page*pageSize) < noOfExpense,
+       hasPreviousPage: page > 1,
+       previousPage: page-1,
+       lastPage: Math.ceil(noOfExpense/pageSize)
+    });
+
   } catch(err) {
     console.log("err2", err);
   }
