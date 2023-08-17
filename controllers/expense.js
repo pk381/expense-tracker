@@ -46,7 +46,8 @@ exports.postAddExpense = async (req, res, next) => {
 exports.getExpenses = async (req, res, next) => {
 
   try {
-    const pageSize = 3;
+    
+    const pageSize = parseInt(req.query.pageSize);
     const page = parseInt(req.query.page);
 
     const noOfExpense = await Expense.count({where: {userId: req.user.id}});

@@ -35,7 +35,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   try {
 
     const page = 1;
-    await showPage(page);
+    await showPage(page, 3);
     
   } 
   catch(err) {
@@ -43,24 +43,33 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-async function showPage(page){
+let dynamicPagination = document.getElementById("dynamic_pagination");
+
+dynamicPagination.addEventListener("change", ()=>{
+  pageSize = parseInt(dynamicPagination.value);
+
+  showPage(1, pageSize);
+
+});
+
+async function showPage(page, pageSize){
 
   expenses.innerHTML = "";
 
   console.log("showPage");
 
-  const res = await axios.get(`http://localhost:4000/get-expenses?page=${page}`,{headers:{"Authorization":token}});
+  const res = await axios.get(`http://localhost:4000/get-expenses?page=${page}&pageSize=${pageSize}`,{headers:{"Authorization":token}});
 
   for (var i = 0; i < res.data.expenses.length; i++) {
       addExpense(res.data.expenses[i]);
   }
 
-  showPagination(res.data);
+  showPagination(res.data, pageSize);
 
 }
 
 
-function showPagination(details){
+function showPagination(details, pageSize){
 
   console.log(details);
 
@@ -95,7 +104,7 @@ function showPagination(details){
   }
 
   nextBtn.onclick = ()=>{
-    showPage(details.nextPage);
+    showPage(details.nextPage, pageSize);
   }
 
   expenses.appendChild(newItem);
