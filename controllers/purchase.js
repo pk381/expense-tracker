@@ -3,15 +3,13 @@ const Order = require('../models/order');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-console.log("key_id ",process.env.RAZORPAY_KEY_ID);
-
 exports.purchasePremium =async(req,res,next)=>{
 
     console.log(req.user);
     try{
         let rzp = new Razorpay({
-            key_id: 'rzp_test_OXhyzF1xWxvWDL',
-            key_secret: 'ayPjTkScGBlT3I4z5Oy7Jun5'
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRECT
         })
         const amount=2500;
         const order = await rzp.orders.create({amount,currency:"INR"});
@@ -25,8 +23,8 @@ exports.purchasePremium =async(req,res,next)=>{
     }
 }
 
-function generateAccessToken(id,isPremuimUser){
-    return jwt.sign({userId:id, ispremuimuser: isPremuimUser},'secretKey');
+function generateAccessToken(id){
+    return jwt.sign({id: id},'secretKey');
  }
 
 exports.updateOrder = async(req,res,next)=>{
@@ -43,7 +41,7 @@ exports.updateOrder = async(req,res,next)=>{
 
         await Promise.all([promise1,promise2]);
 
-        res.status(201).json({message:"transition successfull", token:generateAccessToken(userId, true)});
+        res.status(201).json({message:"transition successfull", token: generateAccessToken(userId)});
     }
     catch(err){
         console.log(err);

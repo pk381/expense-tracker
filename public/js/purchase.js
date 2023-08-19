@@ -25,8 +25,13 @@ document.getElementById("buy_premium").addEventListener("click", async () => {
 
         document.getElementById("buy_premium").style.visibility = "hidden";
         document.querySelector("#msg").textContent = "You Are Premium User";
+
+        console.log(res.data.token)
     
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem('isPremium', true);
+        
+        window.location.href = "/expense"
       },
     };
 

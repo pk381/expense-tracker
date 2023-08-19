@@ -4,8 +4,6 @@ const router = express.Router();
 
 const userController = require('../controllers/user');
 
-const expenseController = require('../controllers/expense');
-
 router.get('/sign_up', userController.getSignUp);
 
 router.post('/sign_up', userController.postSignUp);

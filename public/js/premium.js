@@ -2,41 +2,17 @@ const isPremium = localStorage.getItem("isPremium");
 
 console.log("isPremium ", isPremium);
 
+
+
 if (isPremium === "true") {
   console.log("premium user");
   document.getElementById("buy_premium").style.visibility = "hidden";
-  document.querySelector("#msg").textContent = "You Are Premium User";
+  document.querySelector("#msg").textContent = "Premium User";
 } else {
   document.getElementById("premium").style.visibility = "hidden";
-  document.getElementById("show_user_files").style.visibility = "hidden";
+  document.getElementById("premium_user").style.visibility = "hidden";
 
   console.log("not a premium user");
-}
-
-async function premiumFeature(e) {
-  e.preventDefault();
-  try {
-    let token = localStorage.getItem("token");
-    const response = await axios.get(
-      "http://localhost:4000/premium/leaderboard",
-      {
-        headers: { Authorization: token },
-      }
-    );
-    document.getElementById("leaderBoard").innerHTML = "<h2>Leader Board</h2>";
-    console.log(response);
-    response.data.forEach((details) => {
-      let newItem = document.createElement("li");
-      newItem.appendChild(
-        document.createTextNode(
-          `name - ${details.name} Total_Amount - ${details.total_cost}`
-        )
-      );
-      boardList.appendChild(newItem);
-    });
-  } catch (err) {
-    console.log(err);
-  }
 }
 
 document.getElementById("leaderBoardBtn").addEventListener("click", async ()=> {
@@ -52,20 +28,18 @@ document.getElementById("leaderBoardBtn").addEventListener("click", async ()=> {
     );
 
     let boardList = document.getElementById("leaderBoard");
-
-    let text = document.createTextNode("Leader Board");
-
-    boardList.appendChild(text);
-
     
     console.log(res);
+
     res.data.forEach((details) => {
 
       let newItem = document.createElement("li");
+      
+      newItem.className = "list-group-item my-1 py-1 px-3";
 
       newItem.appendChild(
         document.createTextNode(
-          `name - ${details.name} Total_Amount - ${details.totalExpense}`
+          `Name:- ${details.name} Total Expense:- ${details.totalExpense}`
         )
       );
 
@@ -115,8 +89,8 @@ document.getElementById("show_user_files").addEventListener("click", async()=>{
     console.log(res.data.fileUrls);
 
     res.data.fileUrls.forEach(row =>{
-      console.log(row.fileUrl)
-      download(row.fileUrl);
+      console.log(row.createdAt)
+      download(row.fileUrl, row.createdAt);
     });
     
   } 
@@ -125,13 +99,20 @@ document.getElementById("show_user_files").addEventListener("click", async()=>{
   }
 });
 
-function download(url){
+function download(url, time){
 
   try{
 
     let fileList = document.getElementById("files");
     let li = document.createElement("li");
+
+    li.className = "list-group-item my-1 mx-0";
     let downloadBtn = document.createElement('button');
+    downloadBtn.className = "btn btn-black btn-sm float-right";
+
+    let date = document.createTextNode(time);
+
+    li.appendChild(date);
     downloadBtn.appendChild(document.createTextNode("Download again"));
 
     downloadBtn.onclick = ()=>{

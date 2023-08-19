@@ -28,9 +28,14 @@ app.use(bodyParser.json());
 app.use('/user',userRoute);
 app.use('/premium',premiumRoute);
 
-app.use(expensRoute);
+app.use('/expense',expensRoute);
 app.use(forgotPasswordRoute);
 app.use('/purchase',purchaseRoute);
+
+// serving index page
+app.use('/',(req, res, next)=>{
+    res.redirect("/user/sign_up");
+});
 
 
 //tables relations

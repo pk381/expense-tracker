@@ -10,7 +10,7 @@ exports.authantication = async (req, res, next)=>{
         const userObj = jwt.verify(token,'secretKey');
         // console.log("user ", userObj);
         const user = await User.findByPk(userObj.id);
-        // console.log(user);
+        console.log(user.id);
         req.user = user;
         next();
     }

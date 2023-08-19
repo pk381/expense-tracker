@@ -3,10 +3,9 @@ const rootDir = require("../util/path");
 const Expense = require('../models/expense');
 const User = require('../models/user');
 const sequelize = require('../util/database');
-const { Console } = require("console");
 
-exports.getIndex = (req, res, next) => {
-  res.sendFile(path.join(rootDir, "views", "index.html"));
+exports.getMain = (req, res, next) => {
+  res.sendFile(path.join(rootDir, "views", "main.html"));
 };
 
 

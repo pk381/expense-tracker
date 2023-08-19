@@ -19,8 +19,11 @@ document.getElementById("submit").addEventListener('click', async (e)=>{
         console.log(res.data.message, res.data.token);
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('isPremium', res.data.isPremium);
+        localStorage.setItem('userName', res.data.userName)
 
-        window.location.href="/";
+        console.log("/expense");
+
+        window.location.href="/expense";
     }
     catch(err){
         console.log(err);

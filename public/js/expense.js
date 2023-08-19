@@ -1,4 +1,8 @@
 
+// displaying user name
+document.getElementById("user_name").innerText = localStorage.getItem('userName');
+
+
 let expenses = document.getElementById("items");
 
 let details = document.querySelectorAll("input");
@@ -17,7 +21,7 @@ document.getElementById("submit").addEventListener("click",async (e) => {
 
   try {
 
-    const res = await axios.post('http://localhost:4000/add-expense', obj, { headers: {Authorization: token } });
+    const res = await axios.post('http://localhost:4000/expense/add-expense', obj, { headers: {Authorization: token } });
 
     addExpense(res.data.expense);
 
@@ -33,10 +37,8 @@ document.getElementById("submit").addEventListener("click",async (e) => {
 window.addEventListener("DOMContentLoaded", async () => {
 
   try {
-
     const page = 1;
-    await showPage(page, 3);
-    
+    await showPage(page, 3);  
   } 
   catch(err) {
     console.log(err);
@@ -46,7 +48,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 let dynamicPagination = document.getElementById("dynamic_pagination");
 
 dynamicPagination.addEventListener("change", ()=>{
-  pageSize = parseInt(dynamicPagination.value);
+  let pageSize = parseInt(dynamicPagination.value);
 
   showPage(1, pageSize);
 
@@ -58,9 +60,11 @@ async function showPage(page, pageSize){
 
   console.log("showPage");
 
-  const res = await axios.get(`http://localhost:4000/get-expenses?page=${page}&pageSize=${pageSize}`,{headers:{"Authorization":token}});
+  const res = await axios.get(`http://localhost:4000/expense/get-expenses?page=${page}&pageSize=${pageSize}`,{headers:{"Authorization":token}});
 
   for (var i = 0; i < res.data.expenses.length; i++) {
+
+    console.log(res.data.expenses[i]);
       addExpense(res.data.expenses[i]);
   }
 
@@ -100,7 +104,7 @@ function showPagination(details, pageSize){
   }
 
   prevBtn.onclick = ()=>{
-    showPage(details.previousPage);
+    showPage(details.previousPage, pageSize);
   }
 
   nextBtn.onclick = ()=>{
@@ -136,7 +140,7 @@ function addExpense(obj) {
     console.log("deleting");
 
     try{
-     await axios.delete("http://localhost:4000/delete-expense/" + obj.id);
+     await axios.delete("http://localhost:4000/expense/delete-expense/" + obj.id);
      expenses.removeChild(li);
     }
     catch(err){

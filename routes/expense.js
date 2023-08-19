@@ -6,7 +6,7 @@ const router = express.Router();
 
 const expenseController = require('../controllers/expense');
 
-router.get('/', expenseController.getIndex);
+router.get('/', expenseController.getMain);
 
 router.post('/add-expense', authantication.authantication, expenseController.postAddExpense);
 

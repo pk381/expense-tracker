@@ -16,6 +16,8 @@ exports.getSignUp = (req, res, next) => {
 };
 
 exports.getLogin = (req, res, next) => {
+
+  console.log("login Page");
   res.sendFile(path.join(rootDir, "views", "login.html"));
 };
 
@@ -37,7 +39,7 @@ exports.postLogin = async (req, res, next) => {
             console.log("err", err);
             
             if(result === true){
-                res.status(201).json({message: "login sussessfully",isPremium: user.isPremuimUser, token: generateToken(user.id)});
+                res.status(201).json({message: "login sussessfully",userName: user.name, isPremium: user.isPremuimUser, token: generateToken(user.id)});
             }
             else{
                 res.status(401).json({message: "password did not match"});
