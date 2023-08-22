@@ -81,7 +81,7 @@ function showPagination(details, pageSize){
 
   let newItem = document.createElement("li");
 
-  newItem.className = "list-group-item m-1";
+  newItem.className = "list-group-item mx-1";
 
   const prevBtn = document.createElement("button");
   const nextBtn = document.createElement("button");
@@ -120,7 +120,7 @@ function addExpense(obj) {
   
   let newItem = document.createElement("li");
 
-  newItem.className = "list-group-item m-1";
+  newItem.className = "list-group-item m-1 py-1";
 
   newItem.appendChild(
     document.createTextNode("" + obj.amount + " " + obj.description + " " + obj.category)
