@@ -79,6 +79,8 @@ document.getElementById("downloadBtn").addEventListener("click", async ()=>{
 
 
 document.getElementById("show_user_files").addEventListener("click", async()=>{
+
+  console.log("geting files")
   
   try{
 
