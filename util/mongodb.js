@@ -10,8 +10,6 @@ const mongoConnect = (callback) =>{
     .then(client=>{
         
         try{
-            
-            console.log("connect");
             _db = client.db();
             callback();
         }

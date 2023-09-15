@@ -4,33 +4,33 @@ const mongoDb = require('mongodb');
 
 class User {
 
-    constructor(name, email, password, isPremiumUser, totalExpense){
+    constructor(name, email, password, isPremiumUser, totalExpense, userId){
         this.name = name;
         this.email = email;
         this.password = password;
         this.isPremiumUser = isPremiumUser;
         this.totalExpense = totalExpense;
+        this._id = userId;
     }
 
     save(){
 
         const db = getDb();
 
-        console.log(db);
+        if(this._id){
 
-        return db.collection('user').insertOne( this
-            // name: 'name',
-            // email: 'email',
-            // password: 'password',
-            // isPremiumUser: 'no',
-            // totalExpense: 0
-        )
-        .then(res=>{
-            console.log(res);
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+            return db.collection('user').updateOne({_id: new mongoDb.ObjectId(userId)}, {$set: this});
+        }
+        else{
+            return db.collection('user').insertOne(this)
+            .then(user=>{
+                return user;
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        }
+
 
     }
 
@@ -38,44 +38,29 @@ class User {
     static fetchAll(){
         const db = getDb();
         return db.collection('user').find().toArray()
-        .then(res=>{
-            console.log(res);
-            return res;
-        })
-        .catch(err=>{
-            console.log(err);
-        });
+        // .then(res=>{
+        //     console.log(res);
+        //     return res;
+        // })
+        // .catch(err=>{
+        //     console.log(err);
+        // });
     }
 
 
-    static fetchById(userId){
+    static fetchByEmail(userEmail){
 
         const db = getDb();
 
-        return db.collection('user').find({_id: new mongoDb.ObjectId(userId)})
+        return db.collection('user').find({email: userEmail})
         .next()
-        .then(res=>{
-            console.log(res);
-            return res;
+        .then(user=>{
+            return user;
         })
         .catch(err=>{
             console.log(err);
         });
 
-    }
-
-    static update(userId){
-
-        const db = getDb();
-
-        return db.collection('user').updateOne({_id: new mongoDb.ObjectId(userId)}, {$set: {name: 'amamammama'}})
-        .then(res=>{
-            console.log(res);
-            return res;
-        })
-        .catch(err=>{
-            console.log(err);
-        })
     }
 
     static deleteById(userId){
