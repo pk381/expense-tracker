@@ -1,7 +1,10 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser'); 
-const sequelize = require('./util/database'); // database
+
+// database
+const sequelize = require('./util/database'); 
+const mongoConnect = require('./util/mongodb').mongoConnect;
 
 const app = express();
 
@@ -55,8 +58,11 @@ UserExpenseFiles.belongsTo(User);
 // syncing with database
 sequelize.sync()
 .then(res=>{
+    
     console.log("listining");
-    app.listen(4000);
+    mongoConnect(()=>{
+        app.listen(4000);
+    });
 })
 .catch(err=>{
     console.log(err);

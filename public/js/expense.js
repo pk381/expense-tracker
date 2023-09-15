@@ -87,7 +87,7 @@ function showPagination(details, pageSize){
   const nextBtn = document.createElement("button");
 
   prevBtn.appendChild(document.createTextNode("Page "+ details.previousPage));
-  prevBtn.className = "btn btn-black btn-sm float-right";
+  prevBtn.className = "btn btn-black btn-sm mx-1 float-left";
 
   nextBtn.appendChild(document.createTextNode("Page " + details.nextPage));
   nextBtn.className = "btn btn-black btn-sm float-right";

@@ -78,7 +78,7 @@ exports.deleteExpense = async (req, res, next) => {
   try {
     const id = req.params.expenseId;
 
-    console.log(id);
+    // console.log(id);
 
     const expense = await Expense.findByPk(id);
 

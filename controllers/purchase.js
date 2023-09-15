@@ -5,7 +5,7 @@ require('dotenv').config();
 
 exports.purchasePremium =async(req,res,next)=>{
 
-    console.log(req.user);
+    // console.log(req.user);
     try{
         let rzp = new Razorpay({
             key_id: process.env.RAZORPAY_KEY_ID,

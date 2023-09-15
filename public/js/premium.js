@@ -1,8 +1,6 @@
 const isPremium = localStorage.getItem("isPremium");
 
-console.log("isPremium ", isPremium);
-
-
+// console.log("isPremium ", isPremium);
 
 if (isPremium === "true") {
   console.log("premium user");
@@ -12,7 +10,7 @@ if (isPremium === "true") {
   document.getElementById("premium").style.visibility = "hidden";
   document.getElementById("premium_user").style.visibility = "hidden";
 
-  console.log("not a premium user");
+  // console.log("not a premium user");
 }
 
 document.getElementById("leaderBoardBtn").addEventListener("click", async ()=> {
@@ -29,7 +27,7 @@ document.getElementById("leaderBoardBtn").addEventListener("click", async ()=> {
 
     let boardList = document.getElementById("leaderBoard");
     
-    console.log(res);
+    // console.log(res);
 
     res.data.forEach((details) => {
 
@@ -80,7 +78,7 @@ document.getElementById("downloadBtn").addEventListener("click", async ()=>{
 
 document.getElementById("show_user_files").addEventListener("click", async()=>{
 
-  console.log("geting files")
+  // console.log("geting files");
   
   try{
 

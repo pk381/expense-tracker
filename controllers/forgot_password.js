@@ -29,7 +29,6 @@ exports.postForgotPassword = async (req, res, next)=>{
                 userId: user.id
             });
 
-            // 
             const client = Sib.ApiClient.instance;
             const apiKey = client.authentications['api-key'];
 
@@ -38,7 +37,7 @@ exports.postForgotPassword = async (req, res, next)=>{
             const tranEmailApi = new Sib.TransactionalEmailsApi();
 
             const sender = {email: 'kumarprabhat0023@gmail.com'};
-            const receivers = [{email: 'prabhat_b190521cs@nitc.ac.in'}];
+            const receivers = [{email: email}];
 
             await tranEmailApi.sendTransacEmail({
                 sender,
