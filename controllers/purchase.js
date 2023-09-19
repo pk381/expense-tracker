@@ -1,20 +1,29 @@
 const Razorpay = require('razorpay');
 const Order = require('../models/order');
+
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 exports.purchasePremium =async(req,res,next)=>{
 
-    // console.log(req.user);
     try{
+
         let rzp = new Razorpay({
             key_id: process.env.RAZORPAY_KEY_ID,
             key_secret: process.env.RAZORPAY_KEY_SECRECT
         })
         const amount=2500;
+
         const order = await rzp.orders.create({amount,currency:"INR"});
 
-        await req.user.createOrder({orderId: order.id, status:"PENDING"});
+        const newOrder = new Order({
+            orderId: order.id,
+            status: 'PENDING',
+            userId: req.user._id
+
+        });
+        await newOrder.save();
+
         res.status(201).json({order,key_id: rzp.key_id})
 
     }
@@ -32,14 +41,18 @@ exports.updateOrder = async(req,res,next)=>{
 
         const order_id = req.body.order_id;
         const payment_id = req.body.payment_id;
-        const userId = req.user.id;
+        const userId = req.user._id;
 
-        const order = await Order.findOne({where:{orderId:order_id}})
+        const order = await Order.findOne({orderId: order_id});
+        
+        order.paymentId = payment_id;
+        order.status = "SUCCESS"
 
-        const promise1 = order.update({paymentId: payment_id, status:"SUCCESS"});
-        const promise2 = req.user.update({isPremuimUser: true});
+        await order.save();
 
-        await Promise.all([promise1,promise2]);
+        req.user.isPremiumUser = true;
+
+        await req.user.save();
 
         res.status(201).json({message:"transition successfull", token: generateAccessToken(userId)});
     }
@@ -52,8 +65,10 @@ exports.updateOrder = async(req,res,next)=>{
 exports.updateFailure = async(req,res,next)=>{
 
     const order_id = req.body.order_id;
-    
-    const order =await Order.findOne({where:{orderId: order_id}});
 
-    await order.update({status:"FAILURE"});
+    const order = await Order.findOne({orderId: order_id});
+
+    order.status = "FAILURE";
+
+    await order.save();
 }
