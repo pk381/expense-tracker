@@ -3,17 +3,8 @@ const path = require('path');
 const bodyParser = require('body-parser'); 
 
 // database
-const sequelize = require('./util/database'); 
-const mongoConnect = require('./util/mongodb').mongoConnect;
-
+const mongoose = require('mongoose');
 const app = express();
-
-// database tables
-const User = require('./models/user');
-const Expense = require('./models/expense');
-const Order = require('./models/order');
-const ForgotPassword = require('./models/forgot_password');
-const UserExpenseFiles = require('./models/user_expense_files');
 
 // routes
 const userRoute = require('./routes/user');
@@ -29,11 +20,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 app.use('/user',userRoute);
+app.use('/expense',expensRoute);
+app.use('/purchase',purchaseRoute);
 app.use('/premium',premiumRoute);
 
-app.use('/expense',expensRoute);
 app.use(forgotPasswordRoute);
-app.use('/purchase',purchaseRoute);
 
 // serving index page
 app.use('/',(req, res, next)=>{
@@ -41,29 +32,13 @@ app.use('/',(req, res, next)=>{
 });
 
 
-//tables relations
-User.hasMany(Expense);
-Expense.belongsTo(User);
+mongoose.connect('mongodb+srv://prabhat:prabhat@cluster0.yktjrxl.mongodb.net/expensetracker?retryWrites=true&w=majority')
+.then(()=>{
+    console.log('connected');
+    app.listen(4000);
 
-User.hasMany(Order);
-Order.belongsTo(User);
-
-User.hasMany(ForgotPassword);
-ForgotPassword.belongsTo(User);
-
-User.hasMany(UserExpenseFiles);
-UserExpenseFiles.belongsTo(User);
-
-
-// syncing with database
-sequelize.sync()
-.then(res=>{
-    
-    console.log("listining");
-    mongoConnect(()=>{
-        app.listen(4000);
-    });
 })
-.catch(err=>{
+.catch(err =>{
     console.log(err);
 })
+

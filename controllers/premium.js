@@ -1,20 +1,19 @@
 const User = require("../models/user");
 const UserExpenseFiles = require("../models/user_expense_files");
+const Expense = require('../models/expense');
 
-const S3services = require('../services/S3services');
+const S3services = require('../services/S3secvices');
 
 exports.getLeaderBoard = async (req, res, next) => {
   try {
-    const users = await User.findAll({
-      attributes: ["name", "totalAmount"],
-    });
+    const users = await User.find();
 
     let leaderBoard = [];
 
     users.forEach((user) => {
       leaderBoard.push({
         name: user.name,
-        totalExpense: user.totalAmount || 0,
+        totalExpense: user.totalExpense || 0,
       });
     });
 
@@ -22,6 +21,7 @@ exports.getLeaderBoard = async (req, res, next) => {
 
     res.status(201).json(leaderBoard);
   } catch (err) {
+
     console.log(err);
   }
 };
@@ -30,7 +30,8 @@ exports.getFileUrls = async (req, res, next) => {
   
   try {
 
-    const fileUrls = await req.user.getUserExpenseFiles();
+    const fileUrls = await UserExpenseFiles.find({userId: req.user._id});
+    console.log("file urls are here", fileUrls)
 
     res.status(201).json({fileUrls: fileUrls})
     
@@ -45,21 +46,25 @@ exports.getFileUrls = async (req, res, next) => {
 exports.getDownload = async (req, res, next) => {
 
   try {
-    const expeses = await req.user.getExpenses();
+
+    const expeses = await Expense.find({userId: req.user._id});
 
     const stringifiedExpense = JSON.stringify(expeses);
 
     const date = new Date();
 
     const filename = `Expense_${
-      req.user.id
+      req.user._id
     }_${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/${date.getTime()}.txt`;
     const url = await S3services.uploadToS3(stringifiedExpense, filename);
 
-    await UserExpenseFiles.create({
+    const file = new UserExpenseFiles({
+      fileName: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/${date.getTime()}.txt`,
       fileUrl: url,
-      userId: req.user.id
+      userId: req.user._id
     });
+
+    await file.save();
 
     res.status(201).json({ url: url });
   } catch (err) {

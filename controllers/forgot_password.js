@@ -1,4 +1,3 @@
-
 const Sib = require('sib-api-v3-sdk');
 require('dotenv').config();
 const path = require("path");
@@ -19,15 +18,18 @@ exports.postForgotPassword = async (req, res, next)=>{
     const email = req.body.email;
 
     try{
-        const user = User.findOne({where:{email}});
+        const user = await User.findOne({email: email});
 
         if(user){
 
-            const forgotPasswordCreate = await ForgotPassword.create({
+            const forgotPass = new ForgotPassword({
                 id: uuid.v4(),
                 active: true,
-                userId: user.id
+                userId: user._id
             });
+
+
+            await forgotPass.save();
 
             const client = Sib.ApiClient.instance;
             const apiKey = client.authentications['api-key'];
@@ -59,11 +61,13 @@ exports.getResetPassword = async (req, res, next)=>{
 
     try{
 
-        const forgotPassword = await ForgotPassword.findByPk(forgotPasswordId);
+        const forgotPassword = await ForgotPassword.findById(forgotPasswordId);
 
         if(forgotPassword){
 
-            await forgotPassword.update({active: false});
+            forgotPassword.isActive = false;
+            
+            await forgotPassword.save();
 
             res.status(200).send(`<html>
                 <script>
@@ -95,8 +99,8 @@ exports.getUpdatedPassword = async (req, res, next)=>{
 
     try{
 
-        const details = await ForgotPassword.findByPk(id);
-        const user = await User.findByPk(details.userId);
+        const details = await ForgotPassword.findById(id);
+        const user = await User.findById(details.userId);
     
         bcrypt.hash(newPassword, 10, async (err, hash)=>{
 
@@ -104,9 +108,11 @@ exports.getUpdatedPassword = async (req, res, next)=>{
                 console.log(err);
             }
             else{
-                await user.update({password: hash});
+                user.password = hash;
+                await user.save();
             }
         });
+        
         res.status(201).json({message: "password updated successfully"});
     }
     catch(err){

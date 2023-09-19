@@ -15,8 +15,6 @@ exports.postAddExpense = async (req, res, next) => {
   const description = req.body.description;
   const category = req.body.category;
 
-  const transaction = await sequelize.transaction();
-
   try {
     const expense = await Expense.create({
       amount: parseInt(amount),
@@ -33,11 +31,8 @@ exports.postAddExpense = async (req, res, next) => {
       
     );
     
-    await transaction.commit();
     res.status(201).json({ expense: expense });
   } catch(err) {
-
-    await transaction.rollback();
     console.log(err);
   }
 };

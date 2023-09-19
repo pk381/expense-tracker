@@ -1,12 +1,9 @@
 const path = require("path");
 const rootDir = require("../util/path");
 const bcrypt = require("bcrypt");
-
 const jwt = require('jsonwebtoken');
-const User = require("../models/user");
 
-const MongoUser = require('../mongoModels/user');
-
+const MongoUser = require('../models/user');
 
 function generateToken(id){
 
@@ -21,34 +18,24 @@ exports.getSignUp = (req, res, next) => {
 
 exports.getLogin = (req, res, next) => {
 
-  // MongoUser.update('6502a4daead5e2f58a550a9f');
-  // MongoUser.fetchById('6502a4daead5e2f58a550a9f');
-
-  MongoUser.deleteById('6502a257f5d575a8cbd82ef9');
-
-  console.log("login Page");
   res.sendFile(path.join(rootDir, "views", "login.html"));
 };
 
 exports.postLogin = async (req, res, next) => {
   try {
 
-    console.log(req.body.email);
+    const user = await MongoUser.find({email: req.body.email});
 
-    const user = await User.findOne({where: {email: req.body.email}});
-
-    // console.log(user.id);
-
-    if (user === null) {
+    if (user.length === 0) {
       res.status(401).json({ message: "user not exist" });
     } else{
 
-        bcrypt.compare(req.body.password, user.password, async (err, result)=>{
+        bcrypt.compare(req.body.password, user[0].password, async (err, result)=>{
 
             console.log("err", err);
             
             if(result === true){
-                res.status(201).json({message: "login successfully",userName: user.name, isPremium: user.isPremuimUser, token: generateToken(user.id)});
+                res.status(201).json({message: "login successfully",userName: user[0].name, isPremiumUser: user[0].isPremiumUser, token: generateToken(user[0]._id)});
             }
             else{
                 res.status(401).json({message: "password did not match"});
@@ -64,29 +51,23 @@ exports.postLogin = async (req, res, next) => {
 exports.postSignUp = async (req, res, next) => {
   try {
 
-    console.log(MongoUser.fetchAll());
+    const isUser = await MongoUser.find({email: req.body.email});
 
-    const isUser = await User.findOne({where: {email: req.body.email}});
-
-    // console.log(isUser);
-
-    if (isUser === null) {
+    if (isUser.length === 0) {
 
         bcrypt.hash(req.body.password, 10, async (err, hash)=>{
 
             console.log(err);
 
-            let mongoUser = new MongoUser(req.body.name, req.body.email, hash, false, 0);
-
-            mongoUser.save();
-
-            const user = await User.create({
-                name: req.body.name,
-                email: req.body.email,
-                password: hash,
-                isPremuimUser: false,
-                totalAmount: 0
+            let mongoUser = new MongoUser({
+              name: req.body.name, 
+              email: req.body.email,
+              password: hash,
+              isPremiumUser: false,
+              totalExpense: 0
             });
+
+            let user = await mongoUser.save();
 
             res.status(201).json({ user: user });
 
