@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser'); 
+require('dotenv').config();
 
 // database
 const mongoose = require('mongoose');
@@ -35,7 +36,7 @@ app.use('/',(req, res, next)=>{
 mongoose.connect('mongodb+srv://prabhat:prabhat@cluster0.yktjrxl.mongodb.net/expensetracker?retryWrites=true&w=majority')
 .then(()=>{
     console.log('connected');
-    app.listen(4000);
+    app.listen(process.env.PORT || 4000);
 
 })
 .catch(err =>{
