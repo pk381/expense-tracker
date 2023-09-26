@@ -19,7 +19,7 @@ document.getElementById("leaderBoardBtn").addEventListener("click", async ()=> {
     let token = localStorage.getItem("token");
 
     const res = await axios.get(
-      "http://localhost:4000/premium/leaderboard",
+      "http://51.20.52.104:4000/premium/leaderboard",
       {
         headers: { Authorization: token },
       }
@@ -54,7 +54,7 @@ document.getElementById("leaderBoardBtn").addEventListener("click", async ()=> {
 document.getElementById("downloadBtn").addEventListener("click", async ()=>{
   
   try{
-    const res = await axios.get("http://localhost:4000/premium/download", 
+    const res = await axios.get("http://51.20.52.104:4000/premium/download", 
     {
       headers: { Authorization: token }
     });
@@ -83,7 +83,7 @@ document.getElementById("show_user_files").addEventListener("click", async()=>{
   
   try{
 
-    const res = await axios.get("http://localhost:4000/premium/all-files",{
+    const res = await axios.get("http://51.20.52.104:4000/premium/all-files",{
       headers: { Authorization: token },
     });
 

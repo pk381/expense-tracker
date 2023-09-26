@@ -15,7 +15,7 @@ document.getElementById('sign_up').addEventListener('click', async (e)=>{
     }
 
     try{
-        const res = await axios.post("http://localhost:4000/user/sign_up", obj);
+        const res = await axios.post("http://51.20.52.104:4000/user/sign_up", obj);
 
         if(res.data.user === 'userExist'){
             message.innerText = "Email already exist";

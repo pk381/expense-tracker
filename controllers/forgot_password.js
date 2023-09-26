@@ -46,7 +46,7 @@ exports.postForgotPassword = async (req, res, next)=>{
                 to: receivers,
                 subject: 'forgot password',
                 textContent: `reset your password`,
-                htmlContent:`http://localhost:4000/reset-password/${forgotPasswordCreate.id}`
+                htmlContent:`http://51.20.52.104:4000/reset-password/${forgotPasswordCreate.id}`
              });
         }
     }

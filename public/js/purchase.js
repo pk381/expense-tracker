@@ -4,7 +4,7 @@ document.getElementById("buy_premium").addEventListener("click", async () => {
     let token = localStorage.getItem("token");
 
     const res = await axios.get(
-      "http://localhost:4000/purchase/premiummembership",
+      "http://51.20.52.104:4000/purchase/premiummembership",
       { headers: { Authorization: token } }
     );
 
@@ -14,7 +14,7 @@ document.getElementById("buy_premium").addEventListener("click", async () => {
 
       handler: async function (result) {
         const res = await axios.post(
-          "http://localhost:4000/purchase/updatestatus",
+          "http://51.20.52.104:4000/purchase/updatestatus",
           {
             order_id: options.order_id,
             payment_id: result.razorpay_payment_id,
@@ -40,7 +40,7 @@ document.getElementById("buy_premium").addEventListener("click", async () => {
     rzpl.open();
     rzpl.on("payment.failed", async function (res) {
       await axios.post(
-        "http://localhost:4000/purchase/updatefailure",
+        "http://51.20.52.104:4000/purchase/updatefailure",
         {
           order_id: res.data.order.id,
         },

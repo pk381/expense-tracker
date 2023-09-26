@@ -21,7 +21,7 @@ document.getElementById("submit").addEventListener("click",async (e) => {
 
   try {
 
-    const res = await axios.post('http://localhost:4000/expense/add-expense', obj, { headers: {Authorization: token } });
+    const res = await axios.post('http://51.20.52.104:4000/expense/add-expense', obj, { headers: {Authorization: token } });
 
     addExpense(res.data.expense);
 
@@ -60,7 +60,7 @@ async function showPage(page, pageSize){
 
   console.log("showPage");
 
-  const res = await axios.get(`http://localhost:4000/expense/get-expenses?page=${page}&pageSize=${pageSize}`,{headers:{"Authorization":token}});
+  const res = await axios.get(`http://51.20.52.104:4000/expense/get-expenses?page=${page}&pageSize=${pageSize}`,{headers:{"Authorization":token}});
 
   for (var i = 0; i < res.data.expenses.length; i++) {
 
@@ -142,7 +142,7 @@ function addExpense(obj) {
     try{
 
     console.log(obj);
-     await axios.delete(`http://localhost:4000/expense/delete-expense/${obj._id}`,
+     await axios.delete(`http://51.20.52.104:4000/expense/delete-expense/${obj._id}`,
       {headers:{"Authorization":token}});
      expenses.removeChild(li);
     }
